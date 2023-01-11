@@ -1,0 +1,92 @@
+<div class="mid-container">
+    <div class="container">
+        <div class="title-row">
+            <h1 class="title">{{currentUser.name}}</h1>
+        </div>
+        <div class="view-calorie-data">
+            <div class="view-calorie-data-date-input">
+                <div class="show-selected-date">
+                    Date : - {{currentDate | date}}
+                </div>
+            </div>
+            <div class="view-calorie-data-chart">
+                <div class="food-data white-card">
+                    <h2>Food Data</h2>
+                    <div class="food-data-table">
+                        <table
+                            class="dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Meal Type</th>
+                                    <th scope="col">Food Group</th>
+                                    <th scope="col">Serving</th>
+                                    <th scope="col">Calorie In</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let food of foodData">
+                                    <th scope="row">{{food.date | date}}</th>
+                                    <td data-label="Meal Type">{{getMealTime(food.mealType)}}</td>
+                                    <td data-label="Food Group">{{food.foodGroup}}</td>
+                                    <td data-label="Serving">{{food.serving}}</td>
+                                    <td data-label="Calorie In">{{food.calorieIn}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="activity-data white-card">
+                    <h2>Activity Data</h2>
+                    <div class="activity-data-table">
+                        <table
+                            class="dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">MET Value</th>
+                                    <th scope="col">Duration</th>
+                                    <th scope="col">Calorie Out</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let activity of activityData">
+                                    <th scope="row">{{activity.date | date}}</th>
+                                    <td data-label="Name">{{activity.name}}</td>
+                                    <td data-label="Description">{{activity.description}}</td>
+                                    <td data-label="MET Value">{{activity.metValue}}</td>
+                                    <td data-label="Duration">{{activity.duration}}</td>
+                                    <td data-label="Calorie Out">{{activity.calorieOut}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="net-calorie-data white-card">
+                    <h2>Net Calorie</h2>
+                    <div class="net-calorie-table">
+                        <div class="net-calorie-row">
+                            <strong>BMR: </strong>
+                            <span>{{dateSpecificUserData?.bmr | number : '1.2-2'}}</span>
+                        </div>
+                        
+                        <div class="net-calorie-row">
+                            <strong>Food: </strong>
+                            <span>{{dateSpecificUserData?.calorieIn}}</span>
+                        </div>
+                        <div class="net-calorie-row">
+                            <strong>Activity: </strong>
+                            <span>{{dateSpecificUserData?.calorieOut}}</span>
+                        </div>
+                        <div class="net-calorie-row net-calorie-totl">
+                            <strong>Net Calorie:</strong>
+                            <span>{{dateSpecificUserData?.netCalorie | number : '1.2-2'}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

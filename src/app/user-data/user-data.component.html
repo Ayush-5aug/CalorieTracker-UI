@@ -1,0 +1,40 @@
+<div class="mid-container">
+    <div class="container user-all-date-data">
+        <div class="title-row">
+            <h1 class="title">{{currentUser.name}}</h1>
+        </div>
+        
+        <div class="user-list ">
+            <div class="white-card">
+                <h2>All Data</h2>
+                <table class="dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%">
+                    <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">BMR</th>
+                            <th scope="col">Calorie In</th>
+                            <th scope="col">Calorie Out</th>
+                            <th scope="col">Net Calorie</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of userData; let i = index">
+                            <th scope="row">{{data.date | date}}</th>
+                            <td data-label="BMR">{{data.bmr | number : '1.2-2'}}</td>
+                            <td data-label="Calorie In">{{data.calorieIn}}</td>
+                            <td data-label="Calorie Out">{{data.calorieOut}}</td>
+                            <td data-label="Net Calorie">{{data.netCalorie | number : '1.2-2'}}</td>
+                            <td data-label="Action">
+                                <div class="btn-set">
+                                  <a class="btn-secondary" (click)="redirectToUserDetails(i)">View</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+           
+        </div>
+    </div>
+</div>

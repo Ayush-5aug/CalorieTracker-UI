@@ -1,0 +1,53 @@
+<div class="mid-container">
+    <div class="signup-container">
+        <div class="white-card">
+            <form [formGroup]="signupForm" (ngSubmit)="onSignup()">
+            <h1>Sign Up</h1>
+            <div class="card-body">
+                <div class="input-field">
+                    <label>Name</label>
+                    <input type="text" placeholder="Name" formControlName="name"/>
+                    <div *ngIf="
+                        signupForm.get('name')?.invalid &&
+                        signupForm.get('name')?.touched" class="text-danger">Please enter User Name
+                    </div>
+                </div>
+                <div class="input-field">
+                    <label>Weight</label>
+                    <input type="number" placeholder="Weight in Kg" formControlName="weight"/>
+                    <div *ngIf="
+                        signupForm.get('weight')?.invalid &&
+                        signupForm.get('weight')?.touched" class="text-danger">Please enter Weight
+                    </div>
+                </div>
+                <div class="input-field">
+                    <label>Height</label>
+                    <input type="number" placeholder="Height in cm" formControlName="height"/>
+                    <div *ngIf="
+                        signupForm.get('height')?.invalid &&
+                        signupForm.get('height')?.touched" class="text-danger">Please enter User Height
+                    </div>
+                </div>
+                <div class="input-field">
+                    <label>Gender</label>
+                    <select class="selectbox" formControlName="gender">
+                        <option value="1">Male</option>
+                        <option value="2">Female</option>
+                    </select>
+                </div>
+                <div class="input-field">
+                    <label>Date of Birth</label>
+                    <input type="date" placeholder="DOB" formControlName="dateOfBirth"/>
+                    <div *ngIf="
+                        signupForm.get('dateOfBirth')?.invalid &&
+                        signupForm.get('dateOfBirth')?.touched" class="text-danger">Please enter Date of Birth
+                    </div>
+                </div>
+                <div class="input-field btn-set--right">
+                    <button type="submit" class="btn-primary" [disabled]="signupForm.invalid">Sign Up</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>

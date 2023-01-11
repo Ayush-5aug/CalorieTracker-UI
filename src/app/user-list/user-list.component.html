@@ -1,0 +1,172 @@
+<div class="mid-container">
+    <div class="container">
+        <div class="title-row">
+            <h1 class="title">User List</h1>
+        </div>
+        <div class="user-list">
+            <table class="dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%">
+                <thead>
+                    <tr>
+                        <th scope="col" class="name">Name</th>
+                        <th scope="col" class="weight">Weight</th>
+                        <th scope="col" class="height">Height</th>
+                        <th scope="col" class="gender">Gender</th>
+                        <th scope="col" class="age">Age</th>
+                        <th scope="col" class="bmr">BMR</th>
+                        <th scope="col" class="action">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let user of userList; let i = index">
+                        <th scope="row">{{user.name}}</th>
+                        <td data-label="Weight">{{user.weight}}</td>
+                        <td data-label="Height">{{user.height}}</td>
+                        <td data-label="Gender" *ngIf="user.gender == 1">Male</td>
+                        <td data-label="Gender" *ngIf="user.gender == 2">Female</td>
+                        <td data-label="Age">{{user.age}}</td>
+                        <td data-label="BMR">{{user.bmr | number : '1.2-2'}}</td>
+                        <td data-label="Action">
+                            <div class="btn-set">
+                                <a class="btn-secondary" (click)="redirectToUserData(i)">View</a>
+                                <button class="btn-primary add-data-btn" data-toggle="modal" data-target="#addDataModal" (click)="fetchMasterData(i)">Add
+                                    Data</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Box Start -->
+<div class="modal fade" id="addDataModal" tabindex="-1" aria-labelledby="addDataModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content add-data-modal">
+            <div class="modal-header">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="food-tab" data-toggle="tab" href="#food" role="tab"
+                            aria-controls="food" aria-selected="true">Add Food</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="activity-tab" data-toggle="tab" href="#activity" role="tab"
+                            aria-controls="activity" aria-selected="false">Add Activity</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-body">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="food" role="tabpanel" aria-labelledby="food-tab">
+                        <form [formGroup]="addCalorieDataForm" (ngSubmit)="onSubmitCalorieForm()">
+                        <div class="input-field">
+                            <label>Select Date</label>
+                            <input type="date" formControlName="date">
+                            <div *ngIf="
+                                    addCalorieDataForm.get('date')?.invalid &&
+                                    addCalorieDataForm.get('date')?.touched" class="text-danger">Please select date
+                            </div>
+                        </div>
+
+                        <div class="input-field">
+                            <label>Select Food Group</label>
+                            <select class="selectbox" (change)="onFoodCategoryChanged($event)" formControlName="foodGroup">
+                                <option [value]="null" disabled>Choose Food Group</option>
+                                <option *ngFor="let food of calorieMasterMapData?.keys()" [value]="food">{{food}}</option>
+                            </select>
+                            <div *ngIf="
+                                    addCalorieDataForm.get('foodGroup')?.invalid &&
+                                    addCalorieDataForm.get('foodGroup')?.touched" class="text-danger">Please select food group
+                            </div>
+                        </div>
+
+                        <div class="input-field">
+                            <label>Select Food Name</label>
+                            <select class="selectbox" formControlName="foodName" (change)="setSelectedFoodCalorie($event)">
+                                <option [value]="null" disabled>Choose Food Name</option>
+                                <option *ngFor="let food of foodListAsPerCategory; let i = index" [value]="food[1]">{{food[0]}}</option>
+                            </select>
+                            <div *ngIf="
+                                    addCalorieDataForm.get('foodName')?.invalid &&
+                                    addCalorieDataForm.get('foodName')?.touched" class="text-danger">Please select food name
+                            </div>
+                        </div>
+                        <div class="input-field">
+                            <label>Select Meal Type</label>
+                            <select class="selectbox" formControlName="mealType">
+                                <option [value]="1">Breakfast</option>
+                                <option [value]="2">Lunch</option>
+                                <option [value]="3">Dinner</option>
+                            </select>
+                        </div>
+
+                        <div class="input-field">
+                            <label>Serving</label>
+                            <input type="number" placeholder="Serving" formControlName="serving"/>
+                            <div *ngIf="
+                                    addCalorieDataForm.get('serving')?.invalid &&
+                                    addCalorieDataForm.get('serving')?.touched" class="text-danger">Please enter serving
+                            </div>
+                        </div>
+                        <div class="input-field input-field-btn btn-set--center">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeBtn">Cancel</button>
+                            <button type="submit" class="btn btn-primary" [disabled]="addCalorieDataForm.invalid">Save</button>
+                        </div>
+                    </form>
+                    </div>
+                    <div class="tab-pane fade" id="activity" role="tabpanel" aria-labelledby="activity-tab">
+                        <form [formGroup]="addActivityDataForm" (ngSubmit)="onSubmitActivityForm()">
+                        <div class="input-field">
+                            <label>Select Date</label>
+                            <input type="date" formControlName="date">
+                            <div *ngIf="
+                                addActivityDataForm.get('date')?.invalid &&
+                                addActivityDataForm.get('date')?.touched" class="text-danger">Please select date
+                            </div>
+                        </div>
+                        <div class="input-field">
+                            <label>Activity Name</label>
+                            <select class="selectbox" formControlName="activityName" (change)="onActivityChanged($event)">
+                                <option [value]="null" disabled>Choose Activity Name</option>
+                                <option *ngFor="let activity of activityMasterMapData?.keys()" [value]="activity">{{activity}}</option>
+                            </select>
+                            <div *ngIf="
+                                addActivityDataForm.get('activityName')?.invalid &&
+                                addActivityDataForm.get('activityName')?.touched" class="text-danger">Please select activity
+                            </div>
+                        </div>
+                        <div class="input-field">
+                            <label>Activity Description</label>
+                            <select class="selectbox" formControlName="activityDescription" (change)="setMetValue($event)">
+                                <option [value]="null" disabled>Choose Activity Description</option>
+                                <option *ngFor="let descriptionData of specificMotionAsPerActivity" [value]="descriptionData[0]">{{descriptionData[0]}}</option>
+                            </select>
+                            <div *ngIf="
+                                addActivityDataForm.get('activityDescription')?.invalid &&
+                                addActivityDataForm.get('activityDescription')?.touched" class="text-danger">Please select description
+                            </div>
+                        </div>
+                        <div class="input-field">
+                            <label>MET Value</label>
+                            <input type="text" [value]="selectedActivityMetValue" placeholder="Value" formControlName="metValue" [readonly]="true">
+                        </div>
+                        <div class="input-field">
+                            <label>Activity Duration</label>
+                            <input type="number" placeholder="Duration in mins" formControlName="duration">
+                            <div *ngIf="
+                                addActivityDataForm.get('duration')?.invalid &&
+                                addActivityDataForm.get('duration')?.touched" class="text-danger">Please enter duration
+                            </div>
+                        </div>
+                        <div class="input-field input-field-btn btn-set--center">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" [disabled]="addActivityDataForm.invalid">Save</button>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Box End -->
